@@ -5,5 +5,6 @@ from women.views import *
 urlpatterns = [
     path('', index),
     path('cats/', categories),
+    path('about/', about)
 
 ]
