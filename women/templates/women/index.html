@@ -4,6 +4,8 @@
 <ul class="list-articles">
 	{% for p in posts %}
 			<li><h2>{{p.title}}</h2>
+				<p class="first">Категория: {{p.cat}}</p>
+				<p class="last">Дата: {{p.time_update|date:"d-m-Y H:i:s"}}</p>
 	{% autoescape on %}
 	{{p.content|linebreaks|truncatewords:50}}
 	{% endautoescape %}

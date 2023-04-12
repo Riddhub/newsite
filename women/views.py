@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404, HttpResponseNotFound
 from django.shortcuts import render
 
 from .models import *
@@ -10,17 +10,42 @@ menu = [{'title': "О сайте", 'url_name': 'about'},
 ]
 
 
+def pageNotFound(request, exception):
+    return HttpResponseNotFound('NOT FOUND')
+
+
 def index(request):
     posts = Women.objects.all()
+    cats = Category.objects.all()
     context = {
         'posts': posts,
         'menu': menu,
-        'title': 'Main Page'
+        'cats': cats,
+        'title': 'Main Page',
+        'cat_selected': 0,
     }
     return render(request, 'women/index.html', context)
 
+
 def show_post(request, post_id):
     return HttpResponse(f'show_post = {post_id}')
+
+
+def show_category(request, cat_id):
+    posts = Women.objects.filter(cat_id=cat_id)
+    cats = Category.objects.all()
+
+    if len(posts) == 0:
+        raise Http404()
+
+    context = {
+        'posts': posts,
+        'menu': menu,
+        'cats': cats,
+        'title': 'Show Category',
+        'cat_selected': cat_id,
+    }
+    return render(request, 'women/index.html', context)
 
 
 def about(request):
@@ -34,13 +59,13 @@ def about(request):
 def addpage(request):
     return HttpResponse('<h1>addpage</h1>')
 
+
 def contact(request):
     return HttpResponse('<h1>contact</h1>')
 
+
 def login(request):
     return HttpResponse('<h1>login</h1>')
-
-
 
 
 def categories(request):
