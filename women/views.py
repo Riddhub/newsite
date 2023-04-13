@@ -15,12 +15,12 @@ def pageNotFound(request, exception):
 
 
 def index(request):
-    posts = Women.objects.all()
-    cats = Category.objects.all()
+    # posts = Women.objects.all()
+    # cats = Category.objects.all()
     context = {
-        'posts': posts,
+        # 'posts': posts,
         'menu': menu,
-        'cats': cats,
+        # 'cats': cats,
         'title': 'Main Page',
         'cat_selected': 0,
     }
@@ -32,16 +32,16 @@ def show_post(request, post_id):
 
 
 def show_category(request, cat_id):
-    posts = Women.objects.filter(cat_id=cat_id)
-    cats = Category.objects.all()
+    # posts = Women.objects.filter(cat_id=cat_id)
+    # cats = Category.objects.all()
 
-    if len(posts) == 0:
-        raise Http404()
+    # if len(posts) == 0:
+    #     raise Http404()
 
     context = {
-        'posts': posts,
+        # 'posts': posts,
         'menu': menu,
-        'cats': cats,
+        # 'cats': cats,
         'title': 'Show Category',
         'cat_selected': cat_id,
     }
