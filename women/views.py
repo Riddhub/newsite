@@ -1,4 +1,6 @@
-from django.http import HttpResponse, HttpResponseNotFound
+from django.contrib import auth
+from django.contrib.auth import authenticate, logout
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView
 
@@ -8,7 +10,6 @@ from .models import *
 menu = [{'title': "О сайте", 'url_name': 'about'},
         {'title': "Добавить статью", 'url_name': 'add_page'},
         {'title': "Обратная связь", 'url_name': 'contact'},
-        {'title': "Войти", 'url_name': 'login'}
 ]
 
 
@@ -112,7 +113,44 @@ def contact(request):
 
 
 def login(request):
-    return HttpResponse('<h1>login</h1>')
+    if request.method == 'POST':
+        form = UserLoginForm(data=request.POST)
+        if form.is_valid():
+            username = request.POST['username']
+            password = request.POST['password']
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                auth.login(request, user)
+                return HttpResponseRedirect(reverse('home'))
+    else:
+        form = UserLoginForm()
+    context = {
+        'menu': menu,
+        'title': 'Login',
+        'form': form,
+    }
+    return render(request, 'women/login.html', context)
+
+
+def logout_user(request):
+    logout(request)
+    return redirect('login')
+
+
+def register(request):
+    if request.method == 'POST':
+        form = UserRegistrationForm(data=request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('home'))
+    else:
+        form = UserRegistrationForm()
+    context = {
+        'menu': menu,
+        'title': 'Register',
+        'form': form,
+    }
+    return render(request, 'women/register.html', context)
 
 
 def categories(request):
