@@ -18,6 +18,7 @@ class AddPostForm(forms.ModelForm):
             'content': forms.Textarea(attrs={'cols': 60, 'rows': 10}),
         }
 
+# Personal validator function
     def clean_title(self):
         title = self.cleaned_data['title']
         if len(title) > 200:
